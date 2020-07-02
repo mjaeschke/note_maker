@@ -1,5 +1,6 @@
 // Dependencies
 // =============================================================
+var notesData = require("../../../db/db.json");
 var express = require("express");
 var path = require("path");
 
@@ -17,13 +18,24 @@ app.use(express.json());
 // =============================================================
 
 // Basic route that sends the user first to the AJAX Page
-app.get("*", function(req, res) {
-  res.sendFile(path.join(__dirname, "../../index.html"));
-});
+
 
 app.get("/notes", function(req, res) {
   res.sendFile(path.join(__dirname, "../../notes.html"));
 });
+app.get("*", function(req, res) {
+  res.sendFile(path.join(__dirname, "../../index.html"));
+});
+
+
+app.get("/api/notes", function(req, res) {
+    return res.json(notesData);
+  });
+  app.post("/api/notes", function(req, res) {
+      notesData.push(req.body);
+      res.json(true);
+  });
+
 
 // Starts the server to begin listening
 // =============================================================
