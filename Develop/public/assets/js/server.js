@@ -31,11 +31,11 @@ app.get("*", function(req, res) {
 
 
 app.get("/api/notes", function(req, res) {
-    res.sendFile(path.join(__dirname,"db/db.json"));
+    res.sendFile(path.join(__dirname,"Develop/db/db.json"));
   });
   app.post("/api/notes", function(req, res) {
     let newNotes = req.body;
-    fs.readFile("db/db.json",function(err,data){
+    fs.readFile("Develop/db/db.json",function(err,data){
       if(err){
         throw err;
       }
@@ -48,11 +48,21 @@ app.get("/api/notes", function(req, res) {
       console.log("write file sucsessfull")
       return res.json(newNotes);
     });
-
     });
-
-
   });
+
+  app.delete("/api/notes/:id",function(res, req){
+    let deleteNote = req.params.id;
+    fs.readFile("Develop/db/db.json", function(err, data){
+      if(err){
+        throw err;
+      }
+      let notes = JSON.parse(data);
+      for(var i = 0;i<notes.length;i++){
+
+      }
+    })
+  })
 
 
 // Starts the server to begin listening
