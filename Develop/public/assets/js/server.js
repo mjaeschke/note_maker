@@ -1,8 +1,9 @@
 // Dependencies
 // =============================================================
-var notesData = require("../../../db/db.json");
-var express = require("express");
-var path = require("path");
+const fs = require("fs");
+const notesData = require("../../../db/db.json");
+const express = require("express");
+const path = require("path");
 const { json } = require("express");
 
 // Sets up the Express App
@@ -30,11 +31,27 @@ app.get("*", function(req, res) {
 
 
 app.get("/api/notes", function(req, res) {
-    res.sendFile(path.join(__dirname,"./db.json"));
+    res.sendFile(path.join(__dirname,"db/db.json"));
   });
-  app.get("/api/notes/:id", function(req, res) {
-    let notes = JSON.parse(fs.readFileSync("./db.json"));
-    res.json(notes);
+  app.post("/api/notes", function(req, res) {
+    let newNotes = req.body;
+    fs.readFile("db/db.json",function(err,data){
+      if(err){
+        throw err;
+      }
+      let notes = JSON.parse(data);
+      notes.push(newNotes);
+    fs.writeFile("db.json",JSON.stringify(notes),function(err){
+      if(err){
+        throw err;
+      }
+      console.log("write file sucsessfull")
+      return res.json(newNotes);
+    });
+
+    });
+
+
   });
 
 
