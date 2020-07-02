@@ -54,7 +54,9 @@ app.post("/api/notes", function(req, res) {
   console.log("Note saved to db.json. Content: ", newNote);
   res.json(savedNotes);
 })
-
+  app.delete("api/notes/:id",function(rew, res){
+    
+  })
 // Starts the server to begin listening
 // =============================================================
 app.listen(PORT, function() {
