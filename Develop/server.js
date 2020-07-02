@@ -55,8 +55,14 @@ app.post("/api/notes", function(req, res) {
   res.json(savedNotes);
 })
   app.delete("api/notes/:id",function(rew, res){
-    
+    let savedNotes = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
+    let noteID = req.params.id;
+    let newID = 0;
+    console.log(`Deleting note`);
+    savedNotes = savedNotes.filter(currNote => {
+      return currNote.id != noteID;
   })
+  
 // Starts the server to begin listening
 // =============================================================
 app.listen(PORT, function() {
