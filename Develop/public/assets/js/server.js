@@ -3,6 +3,7 @@
 var notesData = require("../../../db/db.json");
 var express = require("express");
 var path = require("path");
+const { json } = require("express");
 
 // Sets up the Express App
 // =============================================================
@@ -29,11 +30,11 @@ app.get("*", function(req, res) {
 
 
 app.get("/api/notes", function(req, res) {
-    return res.json(notesData);
+    res.sendFile(path.join(__dirname,"./db.json"));
   });
-  app.post("/api/notes", function(req, res) {
-      notesData.push(req.body);
-      res.json(true);
+  app.get("/api/notes/:id", function(req, res) {
+    let notes = JSON.parse(fs.readFileSync("./db.json"));
+    res.json(notes);
   });
 
 
