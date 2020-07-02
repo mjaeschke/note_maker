@@ -1,7 +1,6 @@
 // Dependencies
 // =============================================================
 const fs = require("fs");
-const notesData = require("../../../db/db.json");
 const express = require("express");
 const path = require("path");
 const { json } = require("express");
@@ -31,17 +30,17 @@ app.get("*", function(req, res) {
 
 
 app.get("/api/notes", function(req, res) {
-    res.sendFile(path.join(__dirname,"Develop/db/db.json"));
+    res.sendFile(path.join(__dirname,"../../../db/db.json"));
   });
   app.post("/api/notes", function(req, res) {
     let newNotes = req.body;
-    fs.readFile("Develop/db/db.json",function(err,data){
+    fs.readFile("../../../db/db.json",function(err,data){
       if(err){
         throw err;
       }
       let notes = JSON.parse(data);
       notes.push(newNotes);
-    fs.writeFile("db.json",JSON.stringify(notes),function(err){
+    fs.writeFile("../../../db/db.json",JSON.stringify(notes),function(err){
       if(err){
         throw err;
       }
@@ -51,18 +50,26 @@ app.get("/api/notes", function(req, res) {
     });
   });
 
-  app.delete("/api/notes/:id",function(res, req){
-    let deleteNote = req.params.id;
-    fs.readFile("Develop/db/db.json", function(err, data){
+  app.delete("api/notes/:id",function(res, req){
+    let deleteNotes = req.params.id;
+    fs.readFile("../../../db/db.json", function(err, data){
       if(err){
         throw err;
       }
       let notes = JSON.parse(data);
       for(var i = 0;i<notes.length;i++){
-
+        if(notes[i].id === deleteNotes){
+          notes.splice(i,1);
+          fs.writeFile("../../../db/db.json",JSON.stringify(notes),function(err){
+            if(err){
+              throw err;
+            }
+            return res.json(notes);
+          });
+        }
       }
-    })
-  })
+    });
+  });
 
 
 // Starts the server to begin listening
